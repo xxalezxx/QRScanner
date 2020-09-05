@@ -20,16 +20,26 @@ class MapsPage extends StatelessWidget {
           );
         }
         return ListView.builder(
-          itemCount: scans.length,
-          itemBuilder: (context, index) => ListTile(
-            leading: Icon(Icons.cloud_queue),
-            title: Text(scans[index].value),
-            trailing: Icon(
-              Icons.keyboard_arrow_right,
-              color: Colors.blue,
-            ),
-          ),
-        );
+            itemCount: scans.length,
+            itemBuilder: (context, index) => Dismissible(
+                key: UniqueKey(),
+                background: Container(
+                  color: Colors.red,
+                ),
+                secondaryBackground: Container(
+                  color: Colors.amber,
+                ),
+                onDismissed: (direction) =>
+                    DBProvider.db.deleteScan(scans[index].id),
+                child: ListTile(
+                  leading: Icon(Icons.cloud_queue),
+                  title: Text(scans[index].value),
+                  subtitle: Text("${scans[index].id}"),
+                  trailing: Icon(
+                    Icons.keyboard_arrow_right,
+                    color: Colors.blue,
+                  ),
+                )));
       },
     );
   }
