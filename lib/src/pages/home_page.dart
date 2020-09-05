@@ -1,9 +1,11 @@
 import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:flutter/material.dart';
+import 'package:qrscanner/src/model/scan_model.dart';
 
 import 'package:qrscanner/src/pages/directions_page.dart';
 import 'package:qrscanner/src/pages/maps.dart';
+import 'package:qrscanner/src/providers/db_provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -74,6 +76,8 @@ class _HomePageState extends State<HomePage> {
 
     var futureString;
 
+    String test = 'https://fernando-herrera.com/#/home';
+
     // try {
     //   futureString = await BarcodeScanner.scan();
     // } catch (e) {
@@ -81,5 +85,8 @@ class _HomePageState extends State<HomePage> {
     // }
 
     // print(futureString.rawContent);
+
+    final scan = ScanModel(value: test);
+    DBProvider.db.nuevoScanRaw(scan);
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class ScanMode {
-  ScanMode({
+class ScanModel {
+  ScanModel({
     this.id,
     this.type,
     this.value,
@@ -17,14 +17,13 @@ class ScanMode {
   String type;
   String value;
 
-  factory ScanMode.fromJson(Map<String, dynamic> json) => ScanMode(
+  factory ScanModel.fromJson(Map<String, dynamic> json) => ScanModel(
         id: json["id"],
         type: json["type"],
         value: json["value"],
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "type": type,
         "value": value,
       };
