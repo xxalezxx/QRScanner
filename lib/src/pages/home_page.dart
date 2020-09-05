@@ -1,11 +1,13 @@
 import 'package:barcode_scan/barcode_scan.dart';
 
 import 'package:flutter/material.dart';
+import 'package:qrscanner/src/block/scans_block.dart';
 import 'package:qrscanner/src/model/scan_model.dart';
 
 import 'package:qrscanner/src/pages/directions_page.dart';
 import 'package:qrscanner/src/pages/maps.dart';
 import 'package:qrscanner/src/providers/db_provider.dart';
+import 'package:qrscanner/src/utils/utils.dart' as utils;
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final scansBlock = new ScansBlock();
+
   int currectIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _floatingButton(BuildContext context) {
     return FloatingActionButton(
-      onPressed: _scanQR,
+      onPressed: () => _scanQR(context),
       child: Icon(Icons.filter_center_focus),
       backgroundColor: Theme.of(context).primaryColor,
     );
@@ -66,17 +70,24 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       centerTitle: true,
       title: Text('QR Scanner'),
-      actions: [IconButton(icon: Icon(Icons.delete_forever), onPressed: () {})],
+      actions: [
+        IconButton(
+          icon: Icon(Icons.delete_forever),
+          onPressed: scansBlock.deleteScanAll,
+        )
+      ],
     );
   }
 
-  _scanQR() async {
+  _scanQR(BuildContext context) async {
 // test
     // https://fernando-herrera.com/#/home
+    // geo:40.724233047051705,-74.00731459101564
 
     var futureString;
 
-    String test = 'https://fernando-herrera.com/#/home';
+    String test = 'https://flutter.io';
+    String test2 = 'geo:40.724233047051705,-74.00731459101564';
 
     // try {
     //   futureString = await BarcodeScanner.scan();
@@ -85,8 +96,12 @@ class _HomePageState extends State<HomePage> {
     // }
 
     // print(futureString.rawContent);
-
     final scan = ScanModel(value: test);
-    DBProvider.db.nuevoScanRaw(scan);
+    scansBlock.addScan(scan);
+
+    final scan2 = ScanModel(value: test2);
+    scansBlock.addScan(scan2);
+
+    utils.openScan(context, scan2);
   }
 }
