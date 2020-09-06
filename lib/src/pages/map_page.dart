@@ -2,8 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:qrscanner/src/model/scan_model.dart';
 
-class MapPage extends StatelessWidget {
+class MapPage extends StatefulWidget {
+  @override
+  _MapPageState createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
   final MapController mapController = MapController();
+
+  int indexTypeMap = 0;
+  String actualMap = 'dark';
+  List<String> typeMaps = [
+    'streets',
+    'dark',
+    'light',
+    'ouutdoors',
+    'satellite',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final ScanModel scan = ModalRoute.of(context).settings.arguments;
@@ -19,6 +35,7 @@ class MapPage extends StatelessWidget {
         ],
       ),
       body: _createFlutterMap(scan),
+      floatingActionButton: _createFloatingButton(context),
     );
   }
 
@@ -43,7 +60,7 @@ class MapPage extends StatelessWidget {
         additionalOptions: {
           'accessToken':
               'pk.eyJ1Ijoiam9yZ2VncmVnb3J5IiwiYSI6ImNrODk5aXE5cjA0c2wzZ3BjcTA0NGs3YjcifQ.H9LcQyP_-G9sxhaT5YbVow',
-          'id': 'mapbox.outdoors' //street, dark, light, outdoors, satellite,
+          'id': 'mapbox.$actualMap' //street, dark, light, outdoors, satellite,
         });
   }
 
@@ -62,5 +79,24 @@ class MapPage extends StatelessWidget {
         ),
       )
     ]);
+  }
+
+  Widget _createFloatingButton(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        if (indexTypeMap < typeMaps.length - 1) {
+          indexTypeMap++;
+          actualMap = typeMaps[indexTypeMap];
+        } else {
+          indexTypeMap = 0;
+          actualMap = typeMaps[indexTypeMap];
+        }
+        setState(() {
+          print('->$indexTypeMap & map es:$actualMap');
+        });
+      },
+      child: Icon(Icons.repeat),
+      backgroundColor: Theme.of(context).primaryColor,
+    );
   }
 }

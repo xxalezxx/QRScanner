@@ -81,27 +81,22 @@ class _HomePageState extends State<HomePage> {
 
   _scanQR(BuildContext context) async {
 // test
-    // https://fernando-herrera.com/#/home
-    // geo:40.724233047051705,-74.00731459101564
 
+    // String test = 'https://flutter.io';
+    // String test2 = 'geo:40.724233047051705,-74.00731459101564';
     var futureString;
+    try {
+      futureString = await BarcodeScanner.scan();
+    } catch (e) {
+      futureString = e.toString();
+    }
 
-    String test = 'https://flutter.io';
-    String test2 = 'geo:40.724233047051705,-74.00731459101564';
-
-    // try {
-    //   futureString = await BarcodeScanner.scan();
-    // } catch (e) {
-    //   futureString = e.toString();
-    // }
+    if (futureString != null) {
+      final scan = ScanModel(value: futureString.rawContent);
+      scansBlock.addScan(scan);
+      utils.openScan(context, scan);
+    }
 
     // print(futureString.rawContent);
-    final scan = ScanModel(value: test);
-    scansBlock.addScan(scan);
-
-    final scan2 = ScanModel(value: test2);
-    scansBlock.addScan(scan2);
-
-    utils.openScan(context, scan2);
   }
 }
